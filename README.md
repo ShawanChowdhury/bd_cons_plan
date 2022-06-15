@@ -1,1 +1,2 @@
 # bd_cons_plan
+Here, we collate species occurrence records from a variety of sources and develop ecological niche models to estimate their distributions across the country. We overlay each species suitability maps with the current distribution of PAs to determine the extent of PA coverage for each species. Finally, we develop a spatial prioritization to identify areas in which designation of new PAs will efficiently increase PA coverage.
