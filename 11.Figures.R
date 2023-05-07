@@ -1,9 +1,22 @@
 library(ggplot2)
 library(tidyverse)
 
+# Setting working directory
+setwd("R:/BUTTERFL19-A1712/IMPORTANT/SideProjects/Bangladesh/NationalAssessment/ConservationPlanning/")
+
 # Loading data file
 df <- read_csv("outputs/targetRepresentation_taxonomicDetails_up.csv")
 head(df)
+
+# Mean range, coverage, shortfall by taxa [Table 1]
+mean_df <- df %>%
+  group_by(group) %>%
+  summarise(mean_range = mean(sdm.area), mean_coverage = mean(sdm), 
+            mean_target = mean(TargetCoverage), mean_shortfall = (mean_target - mean_coverage))
+head(mean_df)
+
+# Exporting table
+write_csv(mean_df, "outputs/mean_table.csv")
 
 # Mean coverage by taxa and IUCN status [barplot]
 taxa_iucn <- df %>%
