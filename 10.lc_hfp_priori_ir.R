@@ -7,7 +7,7 @@ library(tidyverse)
 ###########################
 # Higher irreplaceable areas within PAs
 ###########################
-ir <- raster("outputs/irreplacecable_areas.tif")
+ir <- raster("outputs/irreplacecable_areas_up2.tif")
 pa <- raster::raster("data/layer/pa_bd_up.tif")
 
 # Resample PA layer
@@ -15,13 +15,13 @@ pa <- resample(pa, ir, method = "ngb")
 
 # Identifying top 10% values
 data <- as.data.frame(table(getValues(ir)))
-data <- data[2:52797,] # Removing 0
+data <- data[2:77975,] # Removing 0
 data1 <- data %>% slice_max(Var1, prop = 0.1)
-ir_high <- ir >= 0.00834591686725616 # Total cells = 5303
-writeRaster(ir_high, "outputs/ir_high.tif")
+ir_high <- ir >= 1.00175034999847 # Total cells = 7797 # The lowest value of data1
+writeRaster(ir_high, "outputs/ir_high_up.tif")
 
 ir_high_within_pa <- cellStats(raster::Which(pa > 0 & ir_high > 0), "sum")
-ir_high_within_pa/5303*100
+ir_high_within_pa/7797*100
 
 # Priority areas with very low score
 data2 <- data %>% slice_max(Var1, prop = 0.7)
@@ -58,7 +58,7 @@ lc_priori <- lc_priori %>%
   mutate(lc = rownames(lc_priori),
          per = ncell/sum(ncell)*100)
 
-write_csv(lc_priori, "outputs/lc_priori.csv")
+write_csv(lc_priori, "outputs/lc_priori_up.csv")
   
 # High IR area by land class types
 shrub_ir <- cellStats(raster::Which(shrub > 0 & ir_high > 0), "sum")
@@ -77,7 +77,7 @@ lc_ir <- lc_ir %>%
   mutate(lc = rownames(lc_ir),
          per = ncell/sum(ncell)*100)
 
-write_csv(lc_ir, "outputs/lc_ir.csv")
+write_csv(lc_ir, "outputs/lc_ir_up.csv")
 
 ###########################
 # HFP and prioritization + Irreplaceability scores
@@ -93,19 +93,19 @@ combine <- cbind(coord, vals)
 combine <- as.data.frame(combine)
 head(combine)
 
-write_csv(combine, "outputs/priori_hfp_data.csv")
+write_csv(combine, "outputs/priori_hfp_data_up.csv")
 
 ###########################
 # Divisions and prioritization
 ###########################
 # Exporting clipped layers
-dhk <- raster("data/layer/Dhaka_sp_up.tif")
-kh <- raster("data/layer/Khulna_sp_up.tif")
-cht <- raster("data/layer/Chittagong_sp_up.tif")
-bar <- raster("data/layer/Barisal_sp_up.tif")
-rang <- raster("data/layer/Rangpur_sp_up.tif")
-raj <- raster("data/layer/Rajshahi_sp_up.tif")
-syl <- raster("data/layer/Sylhet_sp_up.tif")
+dhk <- raster("data/layer/Dh_priori_up.tif")
+kh <- raster("data/layer/kh_priori_up.tif")
+cht <- raster("data/layer/Ch_priori_up.tif")
+bar <- raster("data/layer/Ba_priori_up.tif")
+rang <- raster("data/layer/Rang_priori_up.tif")
+raj <- raster("data/layer/Raj_priori_up.tif")
+syl <- raster("data/layer/Sy_priori_up.tif")
 
 # Calcluating proportions of priority areas by division
 dhk_sp <- as.data.frame(table(getValues(dhk)))
@@ -140,6 +140,6 @@ priori_division <- rbind(dhk_sp, kh_sp, cht_sp, bar_sp, rang_sp, raj_sp, syl_sp)
 
 priori_division_pr <- priori_division %>% 
   filter(Var1 == 1) %>% 
-  mutate(prop_total = Freq/55708*100) # Total pixels selected in the prioritization
+  mutate(prop_total = Freq/83954*100) # Total pixels selected in the prioritization
 
-write_csv(priori_division_pr, "outputs/priori_division_pr.csv")
+write_csv(priori_division_pr, "outputs/priori_division_pr_up.csv")

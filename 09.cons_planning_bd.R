@@ -14,7 +14,7 @@ library(tidyverse)
 # 
 
 # prep feature data
-features <- here::here("outputs/BinaryRasters_Built-upAreasRemoved/") %>%
+features <- here::here("R:/BUTTERFL19-A1712/IMPORTANT/SideProjects/Bangladesh/NationalAssessment/ConservationPlanning/outputs/BinaryRasters_Built-upAreasRemoved/") %>%
   list.files(pattern = "*.tif$", full.names = TRUE) %>%
   raster::stack()
 
@@ -26,7 +26,7 @@ pu[][!is.na(pu[])] <- 1
 # especially useful if you run several scenarios
 # just create it once and store to disk
 if(!file.exists("rij.rds")){
-  rij <- rij_matrix(pu, features)
+  rij <- rij_matrix(pu, features) * 0.693 # converting it to km2 to match other data
   rij %>% saveRDS("rij.rds", compress = FALSE) 
   
 } else {
@@ -102,6 +102,7 @@ s2 <- solve(p2, force = TRUE)
 #################################
 # Optimal solution found (tolerance 1.00e-01)
 # Best objective 7.509689226403e+05, best bound 7.497562700475e+05, gap 0.1615%
+# Best objective 1.301105220342e+06, best bound 1.300257587665e+06, gap 0.0651% [new]
 #################################
 
 # as we use rij matrix values to speed things up, we need to convert the results
@@ -112,7 +113,12 @@ r2_val <- s2
 r2[][!is.na(pu[])] <- r2_val
 
 # save results
-r2 %>% writeRaster("outputs/spatial_prioritization.tif", overwrite = TRUE)
+r2 %>% writeRaster("outputs/spatial_prioritization_up.tif", overwrite = TRUE)
+
+# Details on critical conservation areas
+table(getValues(r2)) # 0: 90243; 1: 83954
+area <- 83954*0.693 # 58180.122 km2
+prop <- 58180.122/148460*100 # 39.19%
 
 ##############################################################
 # Irreplaceability
@@ -127,4 +133,4 @@ ir_total <- ir2[, "total"]
 ir_raster <- pu
 ir_raster[!is.na(pu)] <- ir_total
 
-ir_raster %>% writeRaster("outputs/irreplacecable_areas.tif", overwrite = TRUE)
+ir_raster %>% writeRaster("outputs/irreplacecable_areas_up2.tif", overwrite = TRUE)

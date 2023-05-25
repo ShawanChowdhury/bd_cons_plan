@@ -94,7 +94,7 @@ ggsave("outputs/Figures/representationGap_threantened_non-threatened.png")
 ###################
 # LC and prioritization
 ###################
-lc_priori <- read_csv("outputs/lc_priori.csv")
+lc_priori <- read_csv("outputs/lc_priori_up.csv")
 head(lc_priori)
 
 lc_priori %>% 
@@ -104,7 +104,7 @@ lc_priori %>%
   theme_classic() + xlab("") + ylab("")  +
   theme(legend.position = "none", legend.title = element_blank())
 
-ggsave("outputs/Figures/lc_priori.png")
+ggsave("outputs/Figures/lc_priori_up.png")
 
 ###################
 # HFP and Priori
@@ -122,7 +122,7 @@ hfp_priori %>%
   theme_classic() + 
   labs(x = "", y = "")
 
-ggsave("outputs/Figures/hfp_priori.png")
+ggsave("outputs/Figures/hfp_priori_up.png")
 
 ###################
 # Threatened percentage
