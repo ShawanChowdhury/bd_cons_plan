@@ -100,7 +100,7 @@ head(lc_priori)
 lc_priori %>% 
   dplyr::mutate(x = fct_reorder(lc, per)) %>% 
   ggplot( aes(x, per)) +
-  geom_bar(stat = "identity", position = "identity", fill = "darkgoldenrod1") +
+  geom_bar(stat = "identity", position = "identity", fill = "skyblue4") +
   theme_classic() + xlab("") + ylab("")  +
   theme(legend.position = "none", legend.title = element_blank())
 
@@ -118,7 +118,7 @@ hfp_priori %>%
   filter(spatial_prioritization == 1) %>% 
   mutate(bin_y = factor(hfp_bd_re%/%bin_size)) %>% 
   ggplot(aes(bin_y, spatial_prioritization)) +
-  geom_bar(stat = "identity", fill = "darkgoldenrod1") +
+  geom_bar(stat = "identity", fill = "skyblue4") +
   theme_classic() + 
   labs(x = "", y = "")
 
